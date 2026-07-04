@@ -33,25 +33,25 @@ OR_BASE = "https://openrouter.ai/api/v1"
 OR_MODELS = ["openai/gpt-oss-120b:free", "nvidia/nemotron-3-ultra-550b-a55b:free"]
 
 # Rotating query bank — a run uses a slice, so different days surface different angles.
-# PRIMARY MISSION = fully-funded graduate RESEARCH (funded Master's first, funded PhD
-# flagged separately) in active LLM-inference/MLSys research groups & communities.
-# Industry jobs are deliberately NOT searched here — they'll get their own separate
-# module later so they don't crowd out or get mislabeled against funded study.
+# PRIMARY MISSION = fully-funded standalone MASTER'S (research/thesis MSc) in active
+# LLM-inference/MLSys research groups & communities. NOT PhDs, and NOT integrated
+# MSc->PhD / direct-PhD-track programs. Industry jobs and PhDs each get their own
+# separate module later so they don't crowd out or get mislabeled against funded MSc study.
 QUERY_BANK = [
     "fully funded master's LLM inference optimization thesis",
     "funded MSc thesis position machine learning systems MLSys",
     "fully funded master's efficient deep learning efficient NLP",
-    "KV cache paged attention research group funded master's OR PhD",
-    "vLLM OR TensorRT-LLM OR SGLang research lab funded graduate students",
-    "quantization speculative decoding lab funded master's OR PhD",
-    "GPU inference serving systems research group funded scholarship",
+    "KV cache paged attention research group funded master's thesis",
+    "vLLM OR TensorRT-LLM OR SGLang research lab funded MSc student",
+    "quantization speculative decoding funded master's thesis MLSys",
+    "GPU inference serving systems research funded master's scholarship",
     "Erasmus Mundus scholarship machine learning AI systems master's",
     "DAAD OR government scholarship fully funded master's machine learning",
     "fully funded MSc machine learning systems Europe Netherlands",
     "fully funded master's machine learning Canada Australia scholarship",
-    "funded PhD position efficient LLM inference MLSys 2026",
+    "research master's MSc by research machine learning systems funded",
     "fully funded master's computer science AI scholarship 2026 2027",
-    "MLSys research group hiring funded graduate students inference efficiency",
+    "funded thesis-based master's efficient LLM inference research group",
 ]
 
 
@@ -103,10 +103,9 @@ def tavily_search(query, max_results=5):
 JUDGE_INSTRUCTIONS = """You are screening web search results for a specific person, Haseeb,
 a CS undergraduate (finishing 6th semester) looking for FUNDED GRADUATE STUDY.
 
-HE WANTS (the ONLY thing this pipeline collects): fully-funded graduate RESEARCH
-opportunities — a funded MASTER'S (primary goal) or a funded PhD (secondary) — in an
-active research group / lab / community working on LLM INFERENCE OPTIMIZATION / ML
-SYSTEMS (MLSys), a systems + empirical angle. Strong topics: LLM inference/serving
+HE WANTS (the ONLY thing this pipeline collects): a fully-funded standalone MASTER'S
+(research/thesis MSc) in an active research group / lab / community working on LLM
+INFERENCE OPTIMIZATION / ML SYSTEMS (MLSys), a systems + empirical angle. Strong topics: LLM inference/serving
 efficiency, KV-cache management/compression, paged
 attention, vLLM/TensorRT-LLM/SGLang/TGI, quantization/low-bit inference, speculative
 decoding, MoE inference, GPU memory management for DL, efficient transformers/attention,
@@ -114,6 +113,11 @@ distributed/parallel INFERENCE, MLSys/systems-for-ML. Adjacent-OK: multi-agent L
 systems, RAG, applied NLP with a strong systems/empirical component.
 
 DROP (do NOT return these):
+- PhD positions of any kind. This pipeline is MASTER'S ONLY. Drop standalone PhD openings.
+- INTEGRATED / COMBINED MSc-PhD programs, direct-PhD-entry / fast-track-to-PhD tracks, and
+  anything advertised as "Master's leading to a PhD" (admission bundles the doctorate).
+  NOTE: a normal standalone funded MSc that a student *could later* separately apply to a
+  PhD from is FINE — only DROP programs that bundle/require the PhD commitment.
 - INDUSTRY JOBS / paid positions of ANY kind — engineer/researcher/intern roles at
   companies (NVIDIA, ByteDance, Microsoft, Together, etc.). This pipeline is funded STUDY
   only; jobs are handled elsewhere. A salaried job is NOT "funding".
@@ -122,11 +126,11 @@ DROP (do NOT return these):
   anything non-CS; anything NOT a funded degree; anything clearly off-topic.
 
 RULES:
-- Keep ONLY genuine funded graduate-STUDY opportunities (a funded Master's/PhD place, or
-  an active research group with funded student openings in the domain).
+- Keep ONLY a genuine fully-funded standalone MASTER'S place (or an active research group
+  advertising funded MSc/master's-thesis openings in the domain).
 - "Fully funded" means tuition covered + a stipend/scholarship/grant — NOT a salary.
-- type is "Master's" (goal) or "PhD" (funded PhD is OK but MUST be labeled "PhD", never
-  merged into Master's). Never output any other type.
+- type is ALWAYS "Master's". Never output "PhD", "Job", or any other type — if it isn't a
+  standalone funded master's, drop it.
 - Regions: worldwide is fine — do not drop a strong match for its location.
 - Prefer authoritative sources (university/department/lab/official funding pages). Be
   skeptical of vague aggregator/social-media listings; keep only if it looks real.
@@ -134,7 +138,7 @@ RULES:
 
 Return ONLY a JSON array (no prose, no markdown fences). Each element:
 {"title","url","type","university","country","professor","why_fits","funding","confidence"}
-where type in [Master's,PhD], funding in [Fully funded,Partial,Unclear],
+where type is always "Master's", funding in [Fully funded,Partial,Unclear],
 confidence in [High,Medium,Low], why_fits is ONE short sentence. If nothing qualifies,
 return []."""
 

@@ -69,8 +69,11 @@ def load_env():
 
 
 def pick_queries(n):
+    # Rotate the window start by ONE each day so, over len(QUERY_BANK) days, every
+    # angle gets used. (The old `day * n % len` only ever yielded 2 fixed slices when
+    # gcd(n, len) > 1 — e.g. n=7, len=14 → always 0 or 7.)
     day = datetime.date.today().toordinal()
-    start = (day * n) % len(QUERY_BANK)
+    start = day % len(QUERY_BANK)
     return [QUERY_BANK[(start + i) % len(QUERY_BANK)] for i in range(min(n, len(QUERY_BANK)))]
 
 

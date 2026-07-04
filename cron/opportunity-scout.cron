@@ -1,0 +1,10 @@
+# research-opportunities-agent — daily discovery schedule
+#
+# Install for the `hermes` user with:  crontab cron/opportunity-scout.cron
+# (or paste the line below into `crontab -e`)
+#
+# Fires 15:00 UTC = 20:00 PKT (Pakistan, UTC+5), once daily.
+# scout.py is self-contained: it loads ~/.hermes/.env itself and is stdlib-only.
+# Output (searched/verified/new counts, any rate-limit notes) is appended to the log.
+
+0 15 * * * /usr/bin/python3 /home/hermes/.hermes/skills/opportunity-scout/scripts/scout.py >> /home/hermes/.hermes/logs/opportunity-scout.log 2>&1

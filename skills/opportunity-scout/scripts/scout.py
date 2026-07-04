@@ -79,7 +79,7 @@ def pick_queries(n):
     return [QUERY_BANK[(start + i) % len(QUERY_BANK)] for i in range(min(n, len(QUERY_BANK)))]
 
 
-def tavily_search(query, max_results=5):
+def tavily_search(query, max_results=10):
     key = os.environ.get("TAVILY_API_KEY", "")
     body = json.dumps({
         "api_key": key, "query": query, "search_depth": "basic",
@@ -106,9 +106,9 @@ a CS undergraduate (finishing 6th semester) looking for FUNDED GRADUATE STUDY.
 HE WANTS (the ONLY thing this pipeline collects): a fully-funded standalone MASTER'S
 (research/thesis MSc) in an active research group / lab / community working on LLM
 INFERENCE OPTIMIZATION / ML SYSTEMS (MLSys), a systems + empirical angle. Strong topics: LLM inference/serving
-efficiency, KV-cache management/compression, paged
-attention, vLLM/TensorRT-LLM/SGLang/TGI, quantization/low-bit inference, speculative
-decoding, MoE inference, GPU memory management for DL, efficient transformers/attention,
+efficiency, KV-cache management/compression, paged attention,
+vLLM/TensorRT-LLM/SGLang/TGI, quantization/low-bit inference, speculative decoding, MoE
+inference, GPU memory management for DL, efficient transformers/attention,
 distributed/parallel INFERENCE, MLSys/systems-for-ML. Adjacent-OK: multi-agent LLM
 systems, RAG, applied NLP with a strong systems/empirical component.
 
